@@ -19,6 +19,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@bull-board/express": "^5.21.4",
     "@types/dockerode": "^3.3.31",
     "@types/ioredis": "^5.0.0",
     "bullmq": "^5.12.5",

@@ -41,17 +41,18 @@ async function runCpp( code: string, inputData: string){
 
     
 
-    await new Promise((res)=>{
+    const response = await new Promise((res)=>{
         loggerStream.on('end', () => {
             console.log(rawLogBuffer)
             const completeBuffer = Buffer.concat(rawLogBuffer)
             const decodedStream = decodeDockerStream(completeBuffer)
             console.log(decodedStream)
             console.log(decodedStream.stdout)
-    
+            res(decodedStream.stdout)
         })
     })
-    await cppDockerContainer.kill()  // to remove the container when the work is done
+    await cppDockerContainer.remove()  // to remove the container when the work is done
+    return response
 }       
 
 export default runCpp

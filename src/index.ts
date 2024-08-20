@@ -4,19 +4,25 @@ import apiRouter from './routes'
 import bodyParser from 'body-parser'
 // import sampleQueueProducer from './producers/sampleQueueProducer'
  import sampleWorker from './worker/sampleWorker'
-import runCpp from './containers/runCPP'
+import bullBoardAdapter from './config/bullBoardConfig'
+import submissionQueueProducer from './producers/submissionQueueProducer'
+import submissionWorker from './worker/submissionWorker'
+import { SUBMISSION_QUEUE } from './utils/constants'
+
 
 const app = express()
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 app.use(bodyParser.text())
 app.use('/api',apiRouter)
+app.use('/ui', bullBoardAdapter.getRouter())
 
 app.listen(serverConfig.PORT,() => {
     console.log(`server is running on port: ${serverConfig.PORT}`)
+    console.log(`BullBoard dashboard running on: http://localhost:${serverConfig.PORT}/ui`)
 
      sampleWorker('sampleQueue')
-
+     submissionWorker(SUBMISSION_QUEUE)
     // sampleQueueProducer('sampleJob',{
     //     name: "Anand",
     //     company: "Freecharge",
@@ -63,6 +69,10 @@ app.listen(serverConfig.PORT,() => {
 
 const inputCase = `10
 `
-runCpp(code,inputCase)
+submissionQueueProducer({"1234": {
+    language: "CPP",
+    inputCase,
+    code
+  }})
   
 })
